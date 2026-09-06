@@ -2,10 +2,10 @@
   "date": "2026-09-06",
   "device": "laptop",
   "apps": {
-    "foot": 2300,
-    "brave-browser": 400,
-    "org.localsend.localsend_app": 80
+    "foot": 2890,
+    "brave-browser": 750,
+    "org.localsend.localsend_app": 100
   },
-  "total_seconds": 2780,
-  "updated_at": "2026-09-06T21:08:06.374021Z"
+  "total_seconds": 3740,
+  "updated_at": "2026-09-06T21:24:06.362335Z"
 }
