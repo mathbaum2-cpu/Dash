@@ -1,38 +1,27 @@
 #!/usr/bin/env bash
-# Reads today's Android usage stats via `dumpsys usagestats` and writes
-# data/android/<date>.json into the git repo, then commits and pushes.
+# Fetches today's per-app usage from the RescueTime Analytic Data API and
+# writes data/android/<date>.json into the git repo, then commits and
+# pushes.
 #
-# Requires: Termux has been granted "Usage access" in
-# Settings > Apps > Special app access > Usage access > Termux > Allow.
-# No root or adb needed.
-#
-# NOTE: `dumpsys usagestats` is plain-text and its exact format varies by
-# Android version/OEM. Run `dumpsys usagestats > ~/usagestats_sample.txt`
-# once and eyeball it if the parser below finds nothing - the two fields it
-# relies on (`package=` and `totalTimeUsed=`) are present on stock AOSP 10-14
-# but adjust the regex in parse.py if your device differs.
+# Requires:
+#  - The RescueTime Android app installed and tracking enabled (this reads
+#    Android's official usage-stats API, so it needs no root and no
+#    android.permission.DUMP - unlike calling `dumpsys` directly, which is
+#    blocked on modern Android even with "Usage access" granted).
+#  - RESCUETIME_API_KEY set in ~/.config/screentime/env (get one at
+#    https://www.rescuetime.com/anapi/manage).
 set -euo pipefail
-
-# Termux's default PATH doesn't include /system/bin, where dumpsys lives.
-export PATH="$PATH:/system/bin"
 
 REPO_DIR="${SCREENTIME_REPO_DIR:?set SCREENTIME_REPO_DIR to the local clone of this repo}"
 DEVICE_NAME="${SCREENTIME_DEVICE_NAME:-android}"
+API_KEY="${RESCUETIME_API_KEY:?set RESCUETIME_API_KEY in ~/.config/screentime/env - get one at https://www.rescuetime.com/anapi/manage}"
 DAY=$(date +%F)
 
 OUT_DIR="$REPO_DIR/data/$DEVICE_NAME"
 OUT_FILE="$OUT_DIR/$DAY.json"
 mkdir -p "$OUT_DIR"
 
-command -v dumpsys >/dev/null || { echo "dumpsys not found (checked PATH incl. /system/bin)" >&2; exit 1; }
-
-RAW=$(dumpsys usagestats 2>&1)
-
-if echo "$RAW" | grep -qi "Permission Denial"; then
-  echo "No usage-stats permission. Grant it in Settings > Apps > Special app" >&2
-  echo "access > Usage access > Termux > Allow, then retry." >&2
-  exit 1
-fi
+RAW=$(curl -fsS "https://www.rescuetime.com/anapi/data?key=$API_KEY&perspective=interval&restrict_kind=activity&interval=day&restrict_begin=$DAY&restrict_end=$DAY&format=json")
 
 echo "$RAW" | python3 "$(dirname "${BASH_SOURCE[0]}")/parse.py" "$DAY" "$DEVICE_NAME" > "$OUT_FILE"
 

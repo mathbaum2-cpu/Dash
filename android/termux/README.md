@@ -1,41 +1,40 @@
 # Android setup (Termux)
 
-1. Install [Termux](https://f-droid.org/packages/com.termux/) and
+Usage data comes from the [RescueTime](https://www.rescuetime.com/) API, not
+from calling `dumpsys usagestats` directly. On modern Android, `dumpsys`
+requires `android.permission.DUMP`, a signature-level permission regular
+apps (including Termux) can't obtain even with "Usage access" granted - it
+fails with `Permission Denial: ... missing android.permission.DUMP
+permission`. RescueTime's app reads usage through the official
+`UsageStatsManager` API (which only needs the normal Usage Access grant)
+and syncs it to their servers, where we can pull it back out via their
+public Data API.
+
+1. Install the [RescueTime Android app](https://play.google.com/store/apps/details?id=com.rescuetime.rtx),
+   sign in/create an account, and let it track for a few minutes.
+2. Get an API key at https://www.rescuetime.com/anapi/manage.
+3. Install [Termux](https://f-droid.org/packages/com.termux/) and
    [Termux:API](https://f-droid.org/packages/com.termux.api/) from F-Droid
    (the Play Store builds are outdated and often broken - use F-Droid).
-2. In Termux:
+4. In Termux:
    ```
-   pkg install git python termux-api
+   pkg install git python termux-api curl
    git clone <this-repo-url>
    cd Dash
    bash android/termux/install.sh
    ```
-3. Grant Termux usage-stats permission: **Settings > Apps > Special app
-   access > Usage access > Termux > Allow**. No root or ADB required - this
-   is the same standard Android permission any usage-tracking app asks for.
-4. Test it manually once: `bash ~/.local/bin/screentime-run.sh` and check
+   `install.sh` will prompt for the RescueTime API key from step 2 and
+   save it to `~/.config/screentime/env`.
+5. Test it manually once: `bash ~/.local/bin/screentime-run.sh` and check
    that `data/android/<today>.json` in your repo clone got populated and
    pushed.
-5. Set up git push auth in Termux beforehand (e.g. an SSH key added via
+6. Set up git push auth in Termux beforehand (e.g. an SSH key added via
    `ssh-keygen` + added to your GitHub account, or a token-based HTTPS
    remote) - the sync script pushes non-interactively.
 
-## If parsing finds no apps
+## If `data/android/<date>.json` has an empty `apps` object
 
-`dumpsys usagestats` is a plain-text debug dump, not a stable API, and its
-exact layout differs across Android versions and OEM skins. If
-`data/android/<date>.json` ends up with an empty `apps` object:
-
-```
-dumpsys usagestats > ~/usagestats_sample.txt
-```
-
-and look at how a per-app line is actually formatted on your device, then
-adjust `LINE_RE` in `android/termux/parse.py` to match.
-
-## Fallback if `dumpsys usagestats` doesn't work at all
-
-Some OEM ROMs restrict this further. If so, Tasker (paid) with the AutoTools
-plugin can query usage stats through the officially sanctioned Usage Access
-permission and write a file that Termux then picks up and pushes the same
-way - ask if you want that variant instead.
+RescueTime syncs on a delay (every 30 min on the free plan, every 3 min on
+paid plans) - if the app was only just installed, or hasn't seen much usage
+today yet, there may be nothing to return. Try again later in the day, and
+double check the API key in `~/.config/screentime/env` is correct.
