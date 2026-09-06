@@ -13,6 +13,9 @@
 # but adjust the regex in parse.py if your device differs.
 set -euo pipefail
 
+# Termux's default PATH doesn't include /system/bin, where dumpsys lives.
+export PATH="$PATH:/system/bin"
+
 REPO_DIR="${SCREENTIME_REPO_DIR:?set SCREENTIME_REPO_DIR to the local clone of this repo}"
 DEVICE_NAME="${SCREENTIME_DEVICE_NAME:-android}"
 DAY=$(date +%F)
@@ -20,6 +23,8 @@ DAY=$(date +%F)
 OUT_DIR="$REPO_DIR/data/$DEVICE_NAME"
 OUT_FILE="$OUT_DIR/$DAY.json"
 mkdir -p "$OUT_DIR"
+
+command -v dumpsys >/dev/null || { echo "dumpsys not found (checked PATH incl. /system/bin)" >&2; exit 1; }
 
 RAW=$(dumpsys usagestats 2>&1)
 
