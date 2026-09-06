@@ -15,6 +15,7 @@ SCREENTIME_REPO_DIR=$REPO_DIR
 SCREENTIME_DEVICE_NAME=android
 EOF
 
+mkdir -p "$HOME/.local/bin"
 cat > "$HOME/.local/bin/screentime-run.sh" <<'EOF'
 #!/usr/bin/env bash
 set -a
@@ -22,7 +23,6 @@ source "$HOME/.config/screentime/env"
 set +a
 exec "$SCREENTIME_REPO_DIR/android/termux/track.sh"
 EOF
-mkdir -p "$HOME/.local/bin"
 chmod 755 "$HOME/.local/bin/screentime-run.sh"
 
 # Schedules a periodic (best-effort, Android may batch/delay it) job via
