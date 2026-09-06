@@ -40,7 +40,7 @@ data = {
     "device": device,
     "apps": dict(sorted(counts.items(), key=lambda kv: -kv[1])),
     "total_seconds": sum(counts.values()),
-    "updated_at": datetime.datetime.utcnow().isoformat() + "Z",
+    "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
 }
 
 with open(out_file, "w") as f:
