@@ -2,10 +2,11 @@
   "date": "2026-09-06",
   "device": "laptop",
   "apps": {
-    "foot": 3680,
-    "brave-browser": 850,
-    "org.localsend.localsend_app": 110
+    "foot": 3980,
+    "brave-browser": 1330,
+    "org.omarchy.screensaver": 150,
+    "org.localsend.localsend_app": 130
   },
-  "total_seconds": 4640,
-  "updated_at": "2026-09-06T21:39:09.245351Z"
+  "total_seconds": 5590,
+  "updated_at": "2026-09-06T21:55:06.368151Z"
 }
