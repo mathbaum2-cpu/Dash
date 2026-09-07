@@ -2,9 +2,10 @@
   "date": "2026-09-08",
   "device": "laptop",
   "apps": {
-    "brave-browser": 1840,
+    "brave-browser": 2430,
+    "foot": 320,
     "@onekeyhq/desktop": 60
   },
-  "total_seconds": 1900,
-  "updated_at": "2026-09-07T22:31:44.228312Z"
+  "total_seconds": 2810,
+  "updated_at": "2026-09-07T22:46:52.623190Z"
 }
