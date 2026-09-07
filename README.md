@@ -19,6 +19,7 @@ Open any `.html` file directly in your browser — no build step, no install.
 | [po-water.html](po-water.html) | Water intake tracker |
 | [finance.html](finance.html) | Finances |
 | [gym.html](gym.html) | Progressive overload gym tracker |
+| [devices.html](devices.html) | Device monitor — battery health, storage, OS version, backups (seeded with a Pixel 8a and an EliteBook) |
 | [topbar.js](topbar.js) | Shared top bar — auto-injected into pages that `<script src="topbar.js">` |
 
 Each app stores its own state in browser `localStorage`. No accounts, no server.

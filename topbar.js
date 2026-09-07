@@ -195,6 +195,10 @@ body.topbar-modal-open {
     <span class="topbar-pill-dot"></span>
     <span class="topbar-pill-label">FINANCE</span>
   </a>
+  <a href="devices.html" class="topbar-pill" id="topbarDevices">
+    <span class="topbar-pill-dot"></span>
+    <span class="topbar-pill-label">DEVICES</span>
+  </a>
 </header>
 `;
 
@@ -274,6 +278,24 @@ body.topbar-modal-open {
     return { done, total };
   }
 
+  function getDevicesStatus() {
+    let devices = [];
+    try { devices = JSON.parse(localStorage.getItem('devices_v1')) || []; } catch (e) {}
+    if (!Array.isArray(devices) || !devices.length) return 'idle';
+    let worst = 'good';
+    devices.forEach((d) => {
+      if (!d) return;
+      const battCrit = d.batteryPct < 50;
+      const battWarn = d.batteryPct < 75;
+      const storPct = d.storageTotalGb ? (d.storageUsedGb / d.storageTotalGb) * 100 : 0;
+      const storCrit = storPct >= 95;
+      const storWarn = storPct >= 85;
+      if (battCrit || storCrit) worst = 'miss';
+      else if ((battWarn || storWarn) && worst !== 'miss') worst = 'warn';
+    });
+    return worst;
+  }
+
   function classifyStatus(done, total) {
     if (total === 0) return 'idle';
     if (done >= total) return 'good';
@@ -293,6 +315,7 @@ body.topbar-modal-open {
     const goalsEl = document.getElementById('topbarGoals');
     const stackEl = document.getElementById('topbarStack');
     const waterEl = document.getElementById('topbarWater');
+    const devicesEl = document.getElementById('topbarDevices');
     if (!goalsEl) return; // not injected yet
 
     const g = getGoalsProgress();
@@ -309,6 +332,7 @@ body.topbar-modal-open {
     setPillStatus(goalsEl, classifyStatus(g.done, g.total));
     setPillStatus(stackEl, classifyStatus(s.done, s.total));
     setPillStatus(waterEl, classifyStatus(w.done, w.total));
+    if (devicesEl) setPillStatus(devicesEl, getDevicesStatus());
   }
 
   // -------- Water +1 (works from any page) --------

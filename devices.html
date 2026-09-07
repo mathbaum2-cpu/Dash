@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<title>Device Monitor</title>
+<script src="topbar.js" defer></script>
+<style>
+:root {
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --success: #6BE3A4;
+  --warning: #F2C063;
+  --danger: #FF6B6B;
+  --font: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #050506;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding: max(28px, env(safe-area-inset-top)) 20px 60px;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(224, 118, 88, 0.16), transparent 45%),
+    radial-gradient(circle at 18% 90%, rgba(180, 180, 200, 0.06), transparent 50%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -2;
+  animation: drift 36s ease-in-out infinite alternate;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  z-index: -1;
+}
+@keyframes drift {
+  0%   { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-22px, 14px, 0); }
+}
+
+.page { max-width: 1100px; margin: 0 auto; }
+
+.dash-title {
+  margin: 0 0 14px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C7C4BC 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+@media (max-width: 480px) { .dash-title { font-size: 22px; } }
+
+.section { margin-top: 8px; }
+.section-title {
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
+}
+.section-title::before {
+  content: ''; width: 18px; height: 1px;
+  background: var(--text-tertiary); opacity: 0.6;
+}
+.section-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
+}
+
+.dv-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  overflow: hidden;
+}
+.dv-card.dv-crit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,107,107,0.10), transparent 60%);
+  pointer-events: none;
+}
+.dv-card.dv-warn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(242,192,99,0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.dv-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  margin-bottom: 16px;
+  position: relative;
+}
+.dv-header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dv-icon {
+  width: 42px; height: 42px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+}
+.dv-name-col { min-width: 0; }
+.dv-name-input {
+  display: block;
+  background: none; border: none; outline: none;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+  padding: 2px 0; width: 100%; max-width: 260px;
+  border-bottom: 1px solid transparent;
+}
+.dv-name-input:focus { border-bottom-color: rgba(255,255,255,0.18); }
+.dv-type-select {
+  background: none; border: none; outline: none;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 2px 0; cursor: pointer;
+}
+.dv-type-select option { background: #14141a; color: var(--text-primary); text-transform: none; }
+
+.dv-status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-tertiary);
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.dv-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-tertiary); flex-shrink: 0; }
+.dv-status-pill.good { background: rgba(107,227,164,0.10); border-color: rgba(107,227,164,0.28); color: var(--success); }
+.dv-status-pill.good .dv-status-dot { background: var(--success); box-shadow: 0 0 8px rgba(107,227,164,0.6); }
+.dv-status-pill.warn { background: rgba(242,192,99,0.10); border-color: rgba(242,192,99,0.28); color: var(--warning); }
+.dv-status-pill.warn .dv-status-dot { background: var(--warning); box-shadow: 0 0 8px rgba(242,192,99,0.6); }
+.dv-status-pill.crit { background: rgba(255,107,107,0.10); border-color: rgba(255,107,107,0.30); color: var(--danger); }
+.dv-status-pill.crit .dv-status-dot { background: var(--danger); box-shadow: 0 0 8px rgba(255,107,107,0.6); animation: dv-pulse 1.6s ease-in-out infinite; }
+@keyframes dv-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,107,0.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(255,107,107,0); }
+}
+
+.dv-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 560px) { .dv-metrics { grid-template-columns: 1fr; } }
+
+.dv-metric-label {
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.dv-metric-value {
+  font-family: var(--font-mono);
+  font-size: 13px; font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: normal;
+  text-transform: none;
+}
+.dv-bar-track {
+  position: relative;
+  height: 7px; border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.dv-bar-fill {
+  position: absolute; inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: var(--success);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s;
+}
+.dv-bar-fill.warn { background: var(--warning); }
+.dv-bar-fill.crit { background: var(--danger); }
+.dv-range {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 16px;
+  background: transparent; cursor: pointer; margin: 0;
+}
+.dv-range::-webkit-slider-runnable-track { height: 3px; background: transparent; }
+.dv-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--text-primary); margin-top: -5px;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.4);
+}
+.dv-range::-moz-range-track { height: 3px; background: transparent; }
+.dv-range::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%; border: none;
+  background: var(--text-primary); box-shadow: 0 0 0 3px rgba(0,0,0,0.4);
+}
+.dv-storage-inputs { display: flex; align-items: center; gap: 6px; }
+.dv-num-input {
+  width: 56px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 7px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 600;
+  padding: 4px 6px; text-align: right;
+  -moz-appearance: textfield;
+}
+.dv-num-input::-webkit-outer-spin-button,
+.dv-num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.dv-storage-sep { color: var(--text-tertiary); font-family: var(--font-mono); font-size: 12px; }
+.dv-storage-unit { color: var(--text-tertiary); font-family: var(--font-mono); font-size: 11px; }
+
+.dv-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 560px) { .dv-meta { grid-template-columns: 1fr; } }
+.dv-field-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 6px; display: block;
+}
+.dv-text-input, .dv-date-input {
+  width: 100%;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 9px 11px;
+  outline: none;
+}
+.dv-date-input { font-family: var(--font-mono); color-scheme: dark; }
+.dv-text-input:focus, .dv-date-input:focus { border-color: rgba(255,255,255,0.16); }
+
+.dv-notes {
+  width: 100%; min-height: 52px; resize: vertical;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 12.5px;
+  padding: 9px 11px;
+  outline: none;
+  margin-bottom: 12px;
+}
+.dv-notes:focus { border-color: rgba(255,255,255,0.16); }
+.dv-notes::placeholder { color: var(--text-tertiary); }
+
+.dv-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.dv-updated {
+  font-family: var(--font-mono);
+  font-size: 10.5px; color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+}
+.dv-delete {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 2px;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.dv-delete:hover { color: var(--danger); }
+
+.dv-add-btn {
+  width: 100%;
+  padding: 13px;
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.14);
+  border-radius: 14px;
+  color: var(--text-tertiary);
+  font-family: var(--font);
+  font-size: 12.5px; font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.dv-add-btn:hover { border-color: rgba(255,255,255,0.28); color: var(--text-primary); background: rgba(255,255,255,0.02); }
+
+.dv-empty {
+  font-size: 12px; color: var(--text-tertiary); font-style: italic;
+  text-align: center; padding: 20px 0;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="dash-title">Device Monitor</h1>
+
+  <div class="section">
+    <div class="section-title">Devices</div>
+    <div id="deviceList"></div>
+    <div id="emptyState" class="dv-empty" hidden>No devices yet — add one below.</div>
+    <button class="dv-add-btn" id="addDeviceBtn" type="button">+ Add device</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var STORE_KEY = 'devices_v1';
+
+  function storeGet() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; } catch (e) { return null; }
+  }
+  function storeSet(devices) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(devices)); } catch (e) {}
+  }
+
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function defaultDevices() {
+    var today = todayStr();
+    return [
+      {
+        id: 'pixel8a', name: 'Pixel 8a', type: 'phone',
+        batteryPct: 100, storageUsedGb: 64, storageTotalGb: 128,
+        osVersion: 'Android 15', lastBackup: today, notes: '', updatedAt: Date.now()
+      },
+      {
+        id: 'elitebook', name: 'EliteBook', type: 'laptop',
+        batteryPct: 100, storageUsedGb: 256, storageTotalGb: 512,
+        osVersion: 'Windows 11', lastBackup: today, notes: '', updatedAt: Date.now()
+      }
+    ];
+  }
+
+  var devices = storeGet();
+  if (!devices || !Array.isArray(devices)) {
+    devices = defaultDevices();
+    storeSet(devices);
+  }
+
+  var ICONS = { phone: '📱', laptop: '💻', other: '⚙️' };
+
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  function batteryStatus(pct) {
+    if (pct < 50) return 'crit';
+    if (pct < 75) return 'warn';
+    return 'good';
+  }
+  function storageStatus(usedGb, totalGb) {
+    if (!totalGb) return 'good';
+    var pct = (usedGb / totalGb) * 100;
+    if (pct >= 95) return 'crit';
+    if (pct >= 85) return 'warn';
+    return 'good';
+  }
+  function worstStatus(a, b) {
+    if (a === 'crit' || b === 'crit') return 'crit';
+    if (a === 'warn' || b === 'warn') return 'warn';
+    return 'good';
+  }
+  function statusLabel(s) {
+    if (s === 'crit') return 'Attention';
+    if (s === 'warn') return 'Watch';
+    return 'OK';
+  }
+
+  function relTime(ts) {
+    if (!ts) return 'never updated';
+    var diffMs = Date.now() - ts;
+    var mins = Math.round(diffMs / 60000);
+    if (mins < 1) return 'updated just now';
+    if (mins < 60) return 'updated ' + mins + 'm ago';
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return 'updated ' + hrs + 'h ago';
+    var days = Math.round(hrs / 24);
+    return 'updated ' + days + 'd ago';
+  }
+
+  function saveDevice(dev) {
+    dev.updatedAt = Date.now();
+    storeSet(devices);
+  }
+
+  function findDevice(id) {
+    for (var i = 0; i < devices.length; i++) if (devices[i].id === id) return devices[i];
+    return null;
+  }
+
+  function buildDeviceCard(dev) {
+    var battStatus = batteryStatus(dev.batteryPct);
+    var storStatus = storageStatus(dev.storageUsedGb, dev.storageTotalGb);
+    var overall = worstStatus(battStatus, storStatus);
+    var storagePct = dev.storageTotalGb ? clamp((dev.storageUsedGb / dev.storageTotalGb) * 100, 0, 100) : 0;
+
+    var card = document.createElement('div');
+    card.className = 'dv-card' + (overall === 'crit' ? ' dv-crit' : overall === 'warn' ? ' dv-warn' : '');
+    card.dataset.id = dev.id;
+
+    card.innerHTML =
+      '<div class="dv-header">' +
+        '<div class="dv-header-left">' +
+          '<div class="dv-icon">' + (ICONS[dev.type] || ICONS.other) + '</div>' +
+          '<div class="dv-name-col">' +
+            '<input class="dv-name-input" type="text" value="" maxlength="40" aria-label="Device name">' +
+            '<select class="dv-type-select" aria-label="Device type">' +
+              '<option value="phone">Phone</option>' +
+              '<option value="laptop">Laptop</option>' +
+              '<option value="other">Other</option>' +
+            '</select>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dv-status-pill"><span class="dv-status-dot"></span><span class="dv-status-text"></span></div>' +
+      '</div>' +
+      '<div class="dv-metrics">' +
+        '<div>' +
+          '<div class="dv-metric-label"><span>Battery health</span><span class="dv-metric-value dv-batt-value"></span></div>' +
+          '<div class="dv-bar-track"><div class="dv-bar-fill dv-batt-fill"></div></div>' +
+          '<input class="dv-range dv-batt-range" type="range" min="0" max="100" step="1" aria-label="Battery health percent">' +
+        '</div>' +
+        '<div>' +
+          '<div class="dv-metric-label"><span>Storage</span><span class="dv-metric-value dv-stor-value"></span></div>' +
+          '<div class="dv-bar-track"><div class="dv-bar-fill dv-stor-fill"></div></div>' +
+          '<div class="dv-storage-inputs">' +
+            '<input class="dv-num-input dv-stor-used" type="number" min="0" step="1" aria-label="Storage used GB">' +
+            '<span class="dv-storage-sep">/</span>' +
+            '<input class="dv-num-input dv-stor-total" type="number" min="1" step="1" aria-label="Storage total GB">' +
+            '<span class="dv-storage-unit">GB</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="dv-meta">' +
+        '<div>' +
+          '<span class="dv-field-label">OS / firmware</span>' +
+          '<input class="dv-text-input dv-os-input" type="text" placeholder="e.g. Android 15" maxlength="60">' +
+        '</div>' +
+        '<div>' +
+          '<span class="dv-field-label">Last backup</span>' +
+          '<input class="dv-date-input dv-backup-input" type="date">' +
+        '</div>' +
+      '</div>' +
+      '<textarea class="dv-notes dv-notes-input" placeholder="Notes — anything worth remembering about this device…" maxlength="500"></textarea>' +
+      '<div class="dv-footer">' +
+        '<span class="dv-updated"></span>' +
+        '<button class="dv-delete" type="button">Remove device</button>' +
+      '</div>';
+
+    var nameInput = card.querySelector('.dv-name-input');
+    var typeSelect = card.querySelector('.dv-type-select');
+    var statusPill = card.querySelector('.dv-status-pill');
+    var statusText = card.querySelector('.dv-status-text');
+    var battValue = card.querySelector('.dv-batt-value');
+    var battFill = card.querySelector('.dv-batt-fill');
+    var battRange = card.querySelector('.dv-batt-range');
+    var storValue = card.querySelector('.dv-stor-value');
+    var storFill = card.querySelector('.dv-stor-fill');
+    var storUsed = card.querySelector('.dv-stor-used');
+    var storTotal = card.querySelector('.dv-stor-total');
+    var osInput = card.querySelector('.dv-os-input');
+    var backupInput = card.querySelector('.dv-backup-input');
+    var notesInput = card.querySelector('.dv-notes-input');
+    var updatedEl = card.querySelector('.dv-updated');
+    var deleteBtn = card.querySelector('.dv-delete');
+    var icon = card.querySelector('.dv-icon');
+
+    function refreshComputed() {
+      var b = batteryStatus(dev.batteryPct);
+      var s = storageStatus(dev.storageUsedGb, dev.storageTotalGb);
+      var o = worstStatus(b, s);
+
+      card.classList.remove('dv-crit', 'dv-warn');
+      if (o === 'crit') card.classList.add('dv-crit');
+      else if (o === 'warn') card.classList.add('dv-warn');
+
+      statusPill.classList.remove('good', 'warn', 'crit');
+      statusPill.classList.add(o);
+      statusText.textContent = statusLabel(o);
+
+      battValue.textContent = dev.batteryPct + '%';
+      battFill.style.width = clamp(dev.batteryPct, 0, 100) + '%';
+      battFill.classList.remove('warn', 'crit');
+      if (b === 'crit') battFill.classList.add('crit');
+      else if (b === 'warn') battFill.classList.add('warn');
+
+      var pct = dev.storageTotalGb ? clamp((dev.storageUsedGb / dev.storageTotalGb) * 100, 0, 100) : 0;
+      storValue.textContent = Math.round(pct) + '%';
+      storFill.style.width = pct + '%';
+      storFill.classList.remove('warn', 'crit');
+      if (s === 'crit') storFill.classList.add('crit');
+      else if (s === 'warn') storFill.classList.add('warn');
+
+      updatedEl.textContent = relTime(dev.updatedAt);
+      icon.textContent = ICONS[dev.type] || ICONS.other;
+    }
+
+    nameInput.value = dev.name;
+    typeSelect.value = dev.type;
+    battRange.value = dev.batteryPct;
+    storUsed.value = dev.storageUsedGb;
+    storTotal.value = dev.storageTotalGb;
+    osInput.value = dev.osVersion;
+    backupInput.value = dev.lastBackup || '';
+    notesInput.value = dev.notes || '';
+    refreshComputed();
+
+    nameInput.addEventListener('input', function () {
+      dev.name = nameInput.value.trim() || 'Untitled device';
+      saveDevice(dev);
+    });
+    typeSelect.addEventListener('change', function () {
+      dev.type = typeSelect.value;
+      saveDevice(dev);
+      refreshComputed();
+    });
+    battRange.addEventListener('input', function () {
+      dev.batteryPct = clamp(parseInt(battRange.value, 10) || 0, 0, 100);
+      saveDevice(dev);
+      refreshComputed();
+    });
+    storUsed.addEventListener('input', function () {
+      dev.storageUsedGb = Math.max(0, parseFloat(storUsed.value) || 0);
+      saveDevice(dev);
+      refreshComputed();
+    });
+    storTotal.addEventListener('input', function () {
+      dev.storageTotalGb = Math.max(1, parseFloat(storTotal.value) || 1);
+      saveDevice(dev);
+      refreshComputed();
+    });
+    osInput.addEventListener('input', function () {
+      dev.osVersion = osInput.value;
+      saveDevice(dev);
+    });
+    backupInput.addEventListener('change', function () {
+      dev.lastBackup = backupInput.value;
+      saveDevice(dev);
+    });
+    notesInput.addEventListener('input', function () {
+      dev.notes = notesInput.value;
+      saveDevice(dev);
+    });
+    deleteBtn.addEventListener('click', function () {
+      if (!confirm('Remove ' + dev.name + ' from device monitor?')) return;
+      devices = devices.filter(function (d) { return d.id !== dev.id; });
+      storeSet(devices);
+      render();
+    });
+
+    return card;
+  }
+
+  function render() {
+    var listEl = document.getElementById('deviceList');
+    var emptyEl = document.getElementById('emptyState');
+    listEl.innerHTML = '';
+    if (!devices.length) {
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+    devices.forEach(function (dev) {
+      listEl.appendChild(buildDeviceCard(dev));
+    });
+  }
+
+  document.getElementById('addDeviceBtn').addEventListener('click', function () {
+    var dev = {
+      id: 'dev_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: 'New device', type: 'other',
+      batteryPct: 100, storageUsedGb: 0, storageTotalGb: 64,
+      osVersion: '', lastBackup: todayStr(), notes: '', updatedAt: Date.now()
+    };
+    devices.push(dev);
+    storeSet(devices);
+    render();
+    var card = document.querySelector('.dv-card[data-id="' + dev.id + '"]');
+    if (card) {
+      var input = card.querySelector('.dv-name-input');
+      if (input) { input.focus(); input.select(); }
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
