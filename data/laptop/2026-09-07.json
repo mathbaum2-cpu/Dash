@@ -2,13 +2,13 @@
   "date": "2026-09-07",
   "device": "laptop",
   "apps": {
-    "brave-browser": 24970,
+    "brave-browser": 25900,
     "org.gnome.Nautilus": 100,
     "one.ablaze.floorp": 80,
     "@onekeyhq/desktop": 70,
     "hyprland-dialog": 10,
     "xdg-desktop-portal-gtk": 10
   },
-  "total_seconds": 25240,
-  "updated_at": "2026-09-07T18:12:43.266338Z"
+  "total_seconds": 26170,
+  "updated_at": "2026-09-07T19:22:48.690204Z"
 }
