@@ -2,11 +2,11 @@
   "date": "2026-09-07",
   "device": "laptop",
   "apps": {
-    "brave-browser": 5220,
+    "brave-browser": 6170,
     "one.ablaze.floorp": 80,
     "@onekeyhq/desktop": 70,
     "hyprland-dialog": 10
   },
-  "total_seconds": 5380,
-  "updated_at": "2026-09-06T23:54:01.666562Z"
+  "total_seconds": 6330,
+  "updated_at": "2026-09-07T00:10:01.663644Z"
 }
