@@ -2,12 +2,14 @@
   "date": "2026-09-10",
   "device": "laptop",
   "apps": {
-    "brave-browser": 57220,
-    "usbimager": 510,
+    "brave-browser": 57890,
+    "usbimager": 520,
     "org.gnome.Nautilus": 420,
     "org.omarchy.screensaver": 300,
+    "Wasabi Wallet": 200,
+    "foot": 80,
     "imv": 30
   },
-  "total_seconds": 58480,
-  "updated_at": "2026-09-10T18:41:44.253424Z"
+  "total_seconds": 59440,
+  "updated_at": "2026-09-10T18:57:41.250450Z"
 }
