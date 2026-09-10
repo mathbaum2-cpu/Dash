@@ -2,14 +2,16 @@
   "date": "2026-09-10",
   "device": "laptop",
   "apps": {
-    "brave-browser": 57890,
+    "brave-browser": 58390,
+    "Wasabi Wallet": 530,
     "usbimager": 520,
-    "org.gnome.Nautilus": 420,
+    "org.gnome.Nautilus": 440,
     "org.omarchy.screensaver": 300,
-    "Wasabi Wallet": 200,
-    "foot": 80,
-    "imv": 30
+    "foot": 150,
+    "imv": 30,
+    "org.torproject.torbrowser-launcher": 10,
+    "Tor Browser": 10
   },
-  "total_seconds": 59440,
-  "updated_at": "2026-09-10T18:57:41.250450Z"
+  "total_seconds": 60380,
+  "updated_at": "2026-09-10T19:13:41.257217Z"
 }
