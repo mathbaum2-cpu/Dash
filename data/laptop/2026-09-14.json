@@ -3,10 +3,10 @@
   "device": "laptop",
   "apps": {
     "brave-browser": 41630,
+    "firefox": 1150,
     "org.omarchy.screensaver": 280,
-    "firefox": 200,
     "Tor Browser": 10
   },
-  "total_seconds": 42120,
-  "updated_at": "2026-09-14T09:45:49.259328Z"
+  "total_seconds": 43070,
+  "updated_at": "2026-09-14T10:01:49.263738Z"
 }
