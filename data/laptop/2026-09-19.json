@@ -2,9 +2,10 @@
   "date": "2026-09-19",
   "device": "laptop",
   "apps": {
-    "brave-browser": 6000,
-    "org.gnome.Nautilus": 20
+    "brave-browser": 6680,
+    "org.gnome.Nautilus": 150,
+    "usbimager": 120
   },
-  "total_seconds": 6020,
-  "updated_at": "2026-09-18T23:40:55.412852Z"
+  "total_seconds": 6950,
+  "updated_at": "2026-09-18T23:56:55.411440Z"
 }
