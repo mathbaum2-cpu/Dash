@@ -3,13 +3,13 @@
   "device": "laptop",
   "apps": {
     "brave-browser": 52620,
-    "foot": 2450,
+    "foot": 3400,
     "org.omarchy.screensaver": 1100,
     "org.gnome.Nautilus": 420,
     "usbimager": 120,
     "xdg-desktop-portal-gtk": 10,
     "md.obsidian.Obsidian": 10
   },
-  "total_seconds": 56730,
-  "updated_at": "2026-09-19T13:52:22.569863Z"
+  "total_seconds": 57680,
+  "updated_at": "2026-09-19T14:08:22.572232Z"
 }
