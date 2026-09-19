@@ -2,14 +2,14 @@
   "date": "2026-09-19",
   "device": "laptop",
   "apps": {
-    "brave-browser": 52620,
-    "foot": 6200,
-    "org.omarchy.screensaver": 1120,
+    "brave-browser": 52660,
+    "foot": 6960,
+    "org.omarchy.screensaver": 1270,
     "org.gnome.Nautilus": 420,
     "usbimager": 120,
     "xdg-desktop-portal-gtk": 10,
     "md.obsidian.Obsidian": 10
   },
-  "total_seconds": 60500,
-  "updated_at": "2026-09-19T14:55:29.910970Z"
+  "total_seconds": 61450,
+  "updated_at": "2026-09-19T15:11:22.572218Z"
 }
