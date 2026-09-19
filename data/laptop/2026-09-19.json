@@ -2,11 +2,11 @@
   "date": "2026-09-19",
   "device": "laptop",
   "apps": {
-    "brave-browser": 40990,
+    "brave-browser": 41950,
     "org.gnome.Nautilus": 150,
     "org.omarchy.screensaver": 150,
     "usbimager": 120
   },
-  "total_seconds": 41410,
-  "updated_at": "2026-09-19T09:36:22.574884Z"
+  "total_seconds": 42370,
+  "updated_at": "2026-09-19T09:52:22.574694Z"
 }
