@@ -3,12 +3,12 @@
   "device": "laptop",
   "apps": {
     "brave-browser": 37410,
-    "org.omarchy.screensaver": 900,
-    "org.gnome.Nautilus": 220,
-    "md.obsidian.Obsidian": 50,
+    "org.gnome.Nautilus": 1060,
+    "org.omarchy.screensaver": 1010,
+    "md.obsidian.Obsidian": 60,
     "org.kde.kdeconnect.app": 40,
     "foot": 20
   },
-  "total_seconds": 38640,
-  "updated_at": "2026-09-21T12:57:50.861505Z"
+  "total_seconds": 39600,
+  "updated_at": "2026-09-21T13:13:50.862770Z"
 }
