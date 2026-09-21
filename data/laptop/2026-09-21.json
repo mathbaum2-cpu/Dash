@@ -2,13 +2,13 @@
   "date": "2026-09-21",
   "device": "laptop",
   "apps": {
-    "brave-browser": 31210,
+    "brave-browser": 32160,
     "org.omarchy.screensaver": 750,
     "md.obsidian.Obsidian": 50,
     "org.kde.kdeconnect.app": 40,
     "foot": 10,
     "org.gnome.Nautilus": 10
   },
-  "total_seconds": 32070,
-  "updated_at": "2026-09-21T11:07:50.933301Z"
+  "total_seconds": 33020,
+  "updated_at": "2026-09-21T11:23:50.934570Z"
 }
