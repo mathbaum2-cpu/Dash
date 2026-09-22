@@ -2,11 +2,11 @@
   "date": "2026-09-22",
   "device": "laptop",
   "apps": {
-    "brave-browser": 48030,
-    "org.omarchy.screensaver": 750,
+    "brave-browser": 48840,
+    "org.omarchy.screensaver": 900,
     "md.obsidian.Obsidian": 130,
     "foot": 50
   },
-  "total_seconds": 48960,
-  "updated_at": "2026-09-22T17:20:58.665160Z"
+  "total_seconds": 49920,
+  "updated_at": "2026-09-22T17:36:58.660023Z"
 }
