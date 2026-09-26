@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-08",
+  "device": "laptop",
+  "apps": {
+    "brave-browser": 32290,
+    "@onekeyhq/desktop": 1270,
+    "foot": 880,
+    "org.gnome.Nautilus": 210,
+    "firefox": 90,
+    "system-config-printer": 70,
+    "org.omarchy.screensaver": 10
+  },
+  "total_seconds": 34820,
+  "updated_at": "2026-09-08T20:13:51.089831Z"
+}
