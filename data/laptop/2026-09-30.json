@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-30",
+  "device": "laptop",
+  "apps": {
+    "org.omarchy.terminal": 130,
+    "brave-browser": 20
+  },
+  "total_seconds": 150,
+  "updated_at": "2026-09-30T02:53:00.481918Z"
+}
