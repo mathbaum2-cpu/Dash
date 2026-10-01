@@ -2,9 +2,10 @@
   "date": "2026-10-02",
   "device": "laptop",
   "apps": {
-    "Tor Browser": 3260,
+    "Tor Browser": 3600,
+    "brave-browser": 610,
     "@onekeyhq/desktop": 210
   },
-  "total_seconds": 3470,
-  "updated_at": "2026-10-01T22:58:31.830911Z"
+  "total_seconds": 4420,
+  "updated_at": "2026-10-01T23:51:02.710638Z"
 }
