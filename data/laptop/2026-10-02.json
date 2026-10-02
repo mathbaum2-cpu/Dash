@@ -2,11 +2,11 @@
   "date": "2026-10-02",
   "device": "laptop",
   "apps": {
-    "brave-browser": 33990,
+    "brave-browser": 34950,
     "Tor Browser": 3600,
     "@onekeyhq/desktop": 210,
     "org.omarchy.screensaver": 150
   },
-  "total_seconds": 37950,
-  "updated_at": "2026-10-02T09:11:02.708124Z"
+  "total_seconds": 38910,
+  "updated_at": "2026-10-02T09:27:02.704336Z"
 }
