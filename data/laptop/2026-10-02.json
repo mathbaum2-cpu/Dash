@@ -3,9 +3,9 @@
   "device": "laptop",
   "apps": {
     "Tor Browser": 3600,
-    "brave-browser": 2530,
+    "brave-browser": 3490,
     "@onekeyhq/desktop": 210
   },
-  "total_seconds": 6340,
-  "updated_at": "2026-10-02T00:23:02.702152Z"
+  "total_seconds": 7300,
+  "updated_at": "2026-10-02T00:39:02.699209Z"
 }
