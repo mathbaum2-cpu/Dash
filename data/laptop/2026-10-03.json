@@ -2,15 +2,15 @@
   "date": "2026-10-03",
   "device": "laptop",
   "apps": {
-    "brave-browser": 39110,
+    "brave-browser": 39920,
     "foot": 750,
+    "org.omarchy.screensaver": 630,
     "libreoffice-draw": 500,
-    "org.omarchy.screensaver": 490,
     "@onekeyhq/desktop": 50,
     "org.omarchy.agent": 40,
     "soffice": 30,
     "org.gnome.Nautilus": 10
   },
-  "total_seconds": 40980,
-  "updated_at": "2026-10-03T18:28:25.271345Z"
+  "total_seconds": 41930,
+  "updated_at": "2026-10-03T18:44:25.270708Z"
 }
