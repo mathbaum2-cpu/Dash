@@ -2,7 +2,7 @@
   "date": "2026-10-03",
   "device": "laptop",
   "apps": {
-    "brave-browser": 29790,
+    "brave-browser": 30710,
     "foot": 750,
     "libreoffice-draw": 500,
     "org.omarchy.screensaver": 300,
@@ -11,6 +11,6 @@
     "soffice": 30,
     "org.gnome.Nautilus": 10
   },
-  "total_seconds": 31470,
-  "updated_at": "2026-10-03T15:47:08.506702Z"
+  "total_seconds": 32390,
+  "updated_at": "2026-10-03T16:02:43.835551Z"
 }
