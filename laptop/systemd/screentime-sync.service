@@ -1,0 +1,7 @@
+[Unit]
+Description=Aggregate screentime data and push to git
+
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.config/screentime/env
+ExecStart=%h/.local/bin/screentime-sync.sh
