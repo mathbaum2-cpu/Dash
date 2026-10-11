@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-01",
+  "device": "laptop",
+  "apps": {
+    "brave-browser": 9680,
+    "Tor Browser": 1290,
+    "org.omarchy.screensaver": 140,
+    "foot": 130
+  },
+  "total_seconds": 11240,
+  "updated_at": "2026-10-01T21:54:31.789108Z"
+}

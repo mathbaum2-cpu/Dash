@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-13",
+  "device": "laptop",
+  "apps": {
+    "brave-browser": 26250,
+    "md.obsidian.Obsidian": 1150,
+    "@onekeyhq/desktop": 110,
+    "foot": 50,
+    "org.omarchy.screensaver": 10,
+    "org.gnome.Nautilus": 10,
+    "Wasabi Wallet": 10
+  },
+  "total_seconds": 27590,
+  "updated_at": "2026-09-13T21:44:54.462438Z"
+}
