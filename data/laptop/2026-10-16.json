@@ -3,9 +3,9 @@
   "device": "laptop",
   "apps": {
     "brave-browser": 8730,
-    "org.omarchy.screensaver": 300,
-    "org.omarchy.agent": 140
+    "org.omarchy.agent": 1040,
+    "org.omarchy.screensaver": 360
   },
-  "total_seconds": 9170,
-  "updated_at": "2026-10-16T09:26:31.154703Z"
+  "total_seconds": 10130,
+  "updated_at": "2026-10-16T09:42:31.155793Z"
 }
