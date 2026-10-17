@@ -1,0 +1,11 @@
+[Unit]
+Description=Screentime active-window tracker (Hyprland)
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/screentime-track.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

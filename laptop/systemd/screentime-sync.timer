@@ -1,0 +1,9 @@
+[Unit]
+Description=Run screentime sync periodically
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+
+[Install]
+WantedBy=timers.target
